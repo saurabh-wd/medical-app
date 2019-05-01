@@ -1,0 +1,9 @@
+.patient-list{
+  list-style-type: none;
+  padding-left: 0;
+}
+.container-inner{
+  background-color: #e1f1f1;
+  padding: 20px;
+  box-shadow: 0px 3px 10px 0px #00000070;
+}

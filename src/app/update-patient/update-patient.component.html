@@ -1,0 +1,99 @@
+<div>
+    <br />
+    <h3>Update Patient</h3>
+    <div [innerHTML]="message"></div>
+    <form [formGroup]="patientsForm" class="needs-validation" (ngSubmit)="updatePatient()" novalidate autocomplete="off">
+        <div formGroupName="name">
+          <div class="form-group row">
+            <label for="first_name" class="col-sm-2 col-form-label">First name*:</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" name="first_name" id="first_name" formControlName="first_name" [ngClass]="{ 'is-invalid': (submitted && patientsForm.controls.name.controls.first_name.invalid)}" />
+                <div *ngIf="submitted && patientsForm.controls.name.controls.first_name.hasError('required')" class="invalid-feedback">First name is required</div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+              <label for="last_name" class="col-sm-2 col-form-label">Last name*:</label>
+              <div class="col-sm-10">
+                  <input type="text" class="form-control" name="last_name" id="last_name" formControlName="last_name" [ngClass]="{ 'is-invalid': (submitted && patientsForm.controls.name.controls.last_name.invalid)}" />
+                  <div *ngIf="submitted && patientsForm.controls.name.controls.last_name.hasError('required')" class="invalid-feedback">Last name is required</div>
+                  <div *ngIf="patientsForm.controls.name.hasError('duplicateName')" class="invalid-feedback">Patient Name already exists, use different name</div>
+              </div>
+          </div>
+        </div>
+        <div class="form-group row">
+            <label for="age" class="col-sm-2 col-form-label">Age*:</label>
+            <div class="col-sm-10">
+                <input type="number" class="form-control" name="age" id="age" formControlName="age" [ngClass]="{ 'is-invalid': (submitted && patientsForm.controls.age.invalid)}" />
+                <div *ngIf="submitted && patientsForm.controls.age.hasError('required')" class="invalid-feedback">Age is required</div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="gender" class="col-sm-2 col-form-label">Gender*:</label>
+            <div class="col-sm-10">
+                <select class="form-control" name="gender" id="gender" formControlName="gender" [ngClass]="{ 'is-invalid': submitted && patientsForm.controls.gender.invalid }">
+                    <option value="">Select</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Femail</option>
+                </select>
+                <div *ngIf="submitted && patientsForm.controls.gender.hasError('required')" class="invalid-feedback">Gender is required</div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="address" class="col-sm-2 col-form-label">Address*:</label>
+            <div class="col-sm-10">
+                <textarea class="form-control" name="address" id="address" formControlName="address" [ngClass]="{ 'is-invalid': (submitted && patientsForm.controls.address.invalid)}"></textarea>
+                <div *ngIf="submitted && patientsForm.controls.address.hasError('required')" class="invalid-feedback">Address is required</div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="phone" class="col-sm-2 col-form-label">Phone*:</label>
+            <div class="col-sm-10">
+                <input type="number" class="form-control" name="phone" id="phone" formControlName="phone" [ngClass]="{ 'is-invalid': (submitted && patientsForm.controls.phone.invalid)}" />
+                <div *ngIf="submitted && patientsForm.controls.phone.hasError('required')" class="invalid-feedback">Phone number is required</div>
+            </div>
+        </div>
+
+
+        <div class="form-group row">
+            <label for="consulted_by" class="col-sm-2 col-form-label">Counsulted By*:</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" name="consulted_by" id="consulted_by" formControlName="consulted_by" [ngClass]="{ 'is-invalid': (submitted && patientsForm.controls.consulted_by.invalid)}" />
+                <div *ngIf="submitted && patientsForm.controls.consulted_by.hasError('required')" class="invalid-feedback">Counsulted by is required</div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="complaints" class="col-sm-2 col-form-label">Complaints*:</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" name="complaints" id="complaints" formControlName="complaints" [ngClass]="{ 'is-invalid': (submitted && patientsForm.controls.complaints.invalid)}" />
+                <div *ngIf="submitted && patientsForm.controls.complaints.hasError('required')" class="invalid-feedback">Complaints is required</div>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="drugs" class="col-sm-2 col-form-label">Drugs:</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" name="drugs" id="drugs" formControlName="drugs" [ngClass]="{ 'is-invalid': (submitted && patientsForm.controls.drugs.invalid)}" />
+                <div *ngIf="submitted && patientsForm.controls.drugs.hasError('required')" class="invalid-feedback">Drugs by is required</div>
+            </div>
+        </div>
+
+        
+        <div class="form-group row">
+            <label for="length" class="col-sm-2 col-form-label">&nbsp;</label>
+            <div class="col-sm-10">
+                <button type="submit" class="btn btn-primary" (click)="submitted=true;">Submit</button>
+                &nbsp;
+                <a routerLink="/list-patients" class="btn btn-default">Cancel</a>
+            </div>
+            
+        </div>
+           
+    </form>
+</div>
+
+

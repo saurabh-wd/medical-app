@@ -1,0 +1,186 @@
+<div>
+  <br />
+  <h3>Patients</h3>
+  <br />
+  <div [innerHTML]="message"></div>
+
+  <div class="text-right clearfix">    
+        <button type="button" class="btn btn-default btn-list-view" (click)="switchView()" *ngIf="currentView == 'list'"><i class="glyphicon glyphicon-th-list" aria-hidden="true"></i></button>
+        <button type="button" class="btn btn-default btn-grid-view" (click)="switchView()" *ngIf="currentView == 'grid'"><i class="glyphicon glyphicon-th-large" aria-hidden="true"></i></button>&nbsp;&nbsp; 
+
+        <button type="button" class="btn btn-primary"><a routerLink="/add-patient" style="color: #fff;">Add Patient</a></button> &nbsp;&nbsp;
+        <button type="button" class="btn btn-danger" (click)="bulkDelete()" [disabled]="!selectedCheckboxIds.length">Delete</button>
+    </div>
+  <div class="list-view" *ngIf="currentView == 'list'">
+    <table class="table">
+      <thead>
+        <tr>
+          <th><input type="checkbox" (change)="checkAll($event)" /></th>
+          <th>Id</th>
+          <th class="pointer" (click)="sortColumn('name')">Name
+            <span class="fa" [ngClass]="{'fa-chevron-down': (sortCol == 'name' && sortType == 'desc'), 'fa-chevron-up': (sortCol == 'name' && sortType == 'asc')}"></span>
+          </th>
+          <th class="pointer" (click)="sortColumn('address')">Address
+            <span class="fa" [ngClass]="{'fa-chevron-down': (sortCol == 'address' && sortType == 'desc'), 'fa-chevron-up': (sortCol == 'name' && sortType == 'asc')}"></span>
+          </th>
+          <th class="pointer" (click)="sortColumn('age')">Age
+            <span class="fa" [ngClass]="{'fa-chevron-down': (sortCol == 'age' && sortType == 'desc'), 'fa-chevron-up': (sortCol == 'name' && sortType == 'asc')}"></span>
+          </th>
+          <th class="pointer" (click)="sortColumn('gender')">Gender
+            <span class="fa" [ngClass]="{'fa-chevron-down': (sortCol == 'gendername' && sortType == 'desc'), 'fa-chevron-up': (sortCol == 'name' && sortType == 'asc')}"></span>
+          </th>
+          <th class="pointer" (click)="sortColumn('phone')">Phone
+            <span class="fa" [ngClass]="{'fa-chevron-down': (sortCol == 'phone' && sortType == 'desc'), 'fa-chevron-up': (sortCol == 'name' && sortType == 'asc')}"></span>
+          </th>
+          <th class="pointer" (click)="sortColumn('consulted_by')">Consulted By
+            <span class="fa" [ngClass]="{'fa-chevron-down': (sortCol == 'consulted_by' && sortType == 'desc'), 'fa-chevron-up': (sortCol == 'name' && sortType == 'asc')}"></span></th>        
+          <th class="pointer" (click)="sortColumn('complaints')">Complaints</th>
+          <th>Drugs</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let patient of patients">
+          <td><input type="checkbox" (change)="selectCheckbox(patient._id, $event)" [(ngModel)]="patient.checked"/></td>
+          <td>{{patient._id.substr(0, 5)}}</td>
+          <td><a routerLink="/update-patient/{{patient._id}}">{{patient.first_name}} {{patient.last_name}}</a></td>
+          <td>{{patient.address}}</td>
+          <td>{{patient.age}}</td>
+          <td>{{patient.gender}}</td>
+          <td>{{patient.phone}}</td>
+          <td>{{patient.consulted_by}}</td>
+          <td>{{patient.complaints}}</td>
+          <td><a (click)="drugModalShow = true;">Prescription</a></td>        
+          <td><a class="btn btn-link" (click)="deleteOne(patient)"><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></a></td>   
+        </tr>
+      </tbody>      
+    </table>
+  </div>
+
+  <div class="list-view" *ngIf="currentView == 'grid'">
+      <ul>
+        <li *ngFor="let patient of patients">
+          <table>
+            <tr>
+              <td colspan="2" class="patient-header">
+                {{patient.first_name}} {{patient.last_name}}
+                <div class="action-buttons">
+                <button class="btn btn-sm btn-link" (click)="deleteOne(patient)"><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></button> &nbsp;
+                <a routerLink="/update-patient/{{patient._id}}" class="btn btn-link"><i class="glyphicon glyphicon-edit" aria-hidden="true"></i></a>
+                </div>
+              </td>
+            </tr>
+            <tr><td>Id:</td><td>{{patient._id.substr(0, 8)}}</td></tr>
+            <tr><td>Name:</td><td>{{patient.first_name}} {{patient.last_name}}</td></tr>            
+            <tr><td>Address:</td><td>{{patient.address}}</td></tr>
+            <tr><td>Age:</td><td>{{patient.age}}</td></tr>
+            <tr><td>Gender:</td><td>{{patient.gender}}</td></tr>
+            <tr><td>Phone:</td><td>{{patient.phone}}</td></tr>
+            <tr><td>Consulted by:</td><td>{{patient.consulted_by}}</td></tr>
+            <tr><td>Complaints:</td><td>{{patient.complaints}}</td></tr>
+          </table>
+        </li>
+      </ul>
+      <div *ngIf="!patients.length" class="text-center">No patient found</div>        
+    </div>
+    <pagination [totalRecords]="totalRecords" [recordsPerPage]="recordPerPage" (doPaginate)="doPaginate($event)"></pagination>
+
+
+</div>
+
+<app-modal (modalClose)="deleteCancel($event)" [showModal]="deleteModalShow">
+    <div class="modal-title">Delete Patient</div>
+    <div class="modal-body" [innerHTML]="deleteMessage"></div>
+    <div class="footer">
+        <button (click)="deleteConfirm()" class="btn btn-sm btn-danger">Delete</button> &nbsp;
+        <button (click)="deleteCancel()" class="btn btn-sm btn-default">Close</button>
+    </div>
+</app-modal>
+
+  <app-modal (modalClose)="deleteCancelDrug($event)" [showModal]="drugModalShow">
+    <div class="modal-title">Patient Drugs</div>
+    <div class="modal-body">
+
+       <div class="text-right clearfix">       
+          <button type="button" class="btn btn-primary" (click)="addDrug = true" [disabled]="addDrug">Add Drug</button>
+          &nbsp;&nbsp;
+          <button type="button" class="btn btn-danger" (click)="bulkDelete()" [disabled]="!selectedCheckboxIds.length">Delete</button>
+    </div>
+
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th><input type="checkbox" (change)="checkAll($event)" /></th>          
+              <th class="pointer" (click)="sortColumn('drug_name')">Drug Name
+                <span class="fa" [ngClass]="{'fa-chevron-down': (sortCol == 'name' && sortType == 'desc'), 'fa-chevron-up': (sortCol == 'name' && sortType == 'asc')}"></span>
+              </th>
+              <th class="pointer" (click)="sortColumn('times')">Number of times
+                <span class="fa" [ngClass]="{'fa-chevron-down': (sortCol == 'address' && sortType == 'desc'), 'fa-chevron-up': (sortCol == 'name' && sortType == 'asc')}"></span>
+              </th>
+              <th class="pointer" (click)="sortColumn('age')">Method to take
+                <span class="fa" [ngClass]="{'fa-chevron-down': (sortCol == 'age' && sortType == 'desc'), 'fa-chevron-up': (sortCol == 'name' && sortType == 'asc')}"></span>
+              </th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of drugs">
+              <td><input type="checkbox" (change)="selectCheckbox(data._id, $event)" [(ngModel)]="data.checked"/></td>
+              <td><a routerLink="/update-data/{{data._id}}">{{data.drug_name}}</a></td>
+              <td>{{data.times}}</td>
+              <td>{{data.method}}</td>
+              <td><a class="btn btn-link" (click)="deleteOneDrug(data)"><i class="glyphicon glyphicon-trash" aria-hidden="true"></i></a></td>   
+            </tr>
+            
+          </tbody>      
+        </table>
+
+        <div *ngIf="addDrug">
+
+          <form class="form-horizontal">
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="email">Name:</label>
+              <div class="col-sm-10">
+                 <input type="text" class="form-control" id="name">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="email">Number of times:</label>
+              <div class="col-sm-10">
+                <input type="number" class="form-control" id="times">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="email">Method to Take:</label>
+              <div class="col-sm-10">
+                 <select  class="col-sm-10 form-control">
+                <option value="">Select</option>
+                <option value="after_meal">After Meal</option>
+                <option value="before_meal">Before Meal</option>
+              </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="email">&nbsp;</label>
+              <div class="col-sm-10">
+                 <button type="submit" class="btn btn-primary">Submit</button> &nbsp;
+                  <button type="button" class="btn btn-primary" (click)="addDrug = false">Cancel</button>
+              </div>
+            </div>
+            
+           
+          </form>
+
+
+            
+            
+        <br />
+
+        </div>
+    </div>
+    <div class="footer">
+        <button (click)="deleteConfirmDrug()" class="btn btn-sm btn-danger">Add</button> &nbsp;
+        <button (click)="deleteCancelDrug()" class="btn btn-sm btn-default">Close</button>
+    </div>
+  </app-modal>

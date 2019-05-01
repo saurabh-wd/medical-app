@@ -1,0 +1,19 @@
+<div class="container-inner" [class.menu-showing]="isMenuShowing">
+  <a (click)="showHideMenu()">
+    <div class="nav-icon">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </a>
+  <div class="primary-nav" [class.menu-showing]="isMenuShowing">
+    <nav>
+      <ul class="patient-list">
+        <li><a routerLink='/list-patients' routerLinkActive="list-events" (click)="isMenuShowing = false;">Patient List</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="main" (click)="isMenuShowing = false; $event.stopPropagation();">
+    <router-outlet></router-outlet>
+  </div>
+</div>

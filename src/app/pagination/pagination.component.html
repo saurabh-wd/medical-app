@@ -1,0 +1,11 @@
+<div class="pagination"  >
+
+    <div class="text-total-records">Showing {{showingFrom()}} to {{showingTo()}} of total {{totalRecords}} records</div>
+
+  <ul class="pages" *ngIf="getPages().length > 1">    
+    <li *ngFor="let pageNum of getPages()" [ngClass]="{'active': this.currentPage == pageNum}">
+      <button (click)="paginate(pageNum)">{{pageNum}}</button>
+    </li>
+  </ul>
+
+</div>

@@ -1,0 +1,23 @@
+/* You can add global styles to this file, and also import other style files */
+body {
+  text-align: left;
+  padding: 10%;
+}
+
+body,
+html {
+  height: 100%;
+}
+
+.bg {
+  /* The image used */
+  background-image: url('assets/bigstock-Doctor-In-Hospital-Background-224963761.jpg');
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: top center;
+  width: 100%;
+  height: 100%;
+}
